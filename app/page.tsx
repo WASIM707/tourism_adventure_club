@@ -9,8 +9,11 @@ import Testimonials from "@/components/testimonials"
 import ContactSection from "@/components/contact-section"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
+import QrGenerator from "@/components/qr/QrGenerator";
+
 
 export default function Home() {
+
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -21,6 +24,7 @@ export default function Home() {
         <TourPackages />
         <TripPlanner />
         <WeatherSection />
+        <QrGenerator />
         <FeaturedGallery />
         <Testimonials />
         <ContactSection />
