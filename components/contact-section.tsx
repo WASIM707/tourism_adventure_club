@@ -1,8 +1,6 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
+import { useState, type ChangeEvent, type FormEvent } from "react"
 import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -19,12 +17,12 @@ export default function ContactSection() {
     message: "",
   })
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     console.log("Form submitted:", formData)
     // Reset form
@@ -167,7 +165,7 @@ export default function ContactSection() {
                     <div>
                       <h3 className="font-medium mb-1">Email Addresses</h3>
                       <p className="text-muted-foreground">
-                        info@wa8550087@gmail.com
+                        wa8550087@gmail.com
                         <br />
                         bookings@wa8550087@gmail.com
                       </p>
@@ -193,19 +191,15 @@ export default function ContactSection() {
 
                 <div className="mt-8">
                   <h3 className="font-medium mb-4">Find Us On Map</h3>
-                  <div className="relative h-[200px] w-full bg-muted rounded-md overflow-hidden">
-                    <div className="w-full h-[400px]">
-                      <iframe
-                        className="w-full h-full rounded-xl border-0"
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13260.407074369392!2d72.3533212!3d35.2062605!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38d9313b50acfe67%3A0xd7b49c1bcb5fc67f!2sMingora%2C%20Swat%2C%20Khyber%20Pakhtunkhwa!5e0!3m2!1sen!2s!4v1713433730089!5m2!1sen!2s"                    
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                      >                       
-                      </iframe>
-                    </div>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <p className="text-muted-foreground">Interactive Map Would Be Embedded Here</p>
-                    </div>
+                  <div className="relative h-[300px] w-full bg-muted rounded-md overflow-hidden">
+                    <iframe
+                      className="w-full h-full border-0"
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13260.407074369392!2d72.3533212!3d35.2062605!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38d9313b50acfe67%3A0xd7b49c1bcb5fc67f!2sMingora%2C%20Swat%2C%20Khyber%20Pakhtunkhwa!5e0!3m2!1sen!2s!4v1713433730089!5m2!1sen!2s"
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Office Location"
+                      allowFullScreen
+                    />
                   </div>
                 </div>
               </CardContent>

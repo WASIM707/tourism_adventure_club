@@ -37,7 +37,7 @@ export default function Navbar() {
     { name: "Destinations", href: "#destinations" },
     { name: "Tour Packages", href: "#packages" },
     { name: "Plan Trip", href: "#planner" },
-    { name: "Gallery", href: "#gallery" },
+    { name: "Gallery", href: "/gallery" },
     { name: "Contact", href: "#contact" },
   ]
 
@@ -107,10 +107,11 @@ export default function Navbar() {
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-4">
-            <Button 
+            <Button
+              asChild
               className="hidden sm:flex shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 rounded-full px-6"
             >
-              Book Now
+              <Link href="/#packages" aria-label="Book Now">Book Now</Link>
             </Button>
             
             {/* Mobile Menu Toggle */}
@@ -153,8 +154,8 @@ export default function Navbar() {
             
             {/* Mobile Menu Footer Info */}
             <div className="mt-10 pt-10 border-t border-border">
-                <Button size="lg" className="w-full text-lg py-6 rounded-xl shadow-xl shadow-primary/20">
-                    Book Your Trip
+                <Button asChild size="lg" className="w-full text-lg py-6 rounded-xl shadow-xl shadow-primary/20">
+                  <Link href="/#packages" aria-label="Book Your Trip">Book Your Trip</Link>
                 </Button>
                 <div className="mt-8 flex flex-col space-y-4 text-muted-foreground">
                     <div className="flex items-center space-x-3">

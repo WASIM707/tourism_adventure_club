@@ -1,13 +1,34 @@
 "use client"
 
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Clock, Star } from "lucide-react"
 import Image from "next/image"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export default function TourPackages() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [formData, setFormData] = useState({
+    package: "",
+    email: "",
+    phone: "",
+    address: "",
+    destination: "",
+  })
+
   const packages = [
     {
       title: "Swat Valley Explorer",
@@ -44,6 +65,19 @@ export default function TourPackages() {
       featured: false,
     },
   ]
+
+  const handleBookNow = (pkgTitle: string) => {
+    setFormData({ ...formData, package: pkgTitle })
+    setIsDialogOpen(true)
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Handle form submission logic here
+    console.log("Booking Data:", formData)
+    setIsDialogOpen(false)
+    alert("Booking request submitted successfully!")
+  }
 
   return (
     <section id="packages" className="py-20 bg-muted/30">
@@ -115,22 +149,90 @@ export default function TourPackages() {
                   </ul>
                 </CardContent>
                 <CardFooter>
-                  
-                <Button  className="w-full">Book Now</Button>
-              </CardFooter>
-            </Card>
+                  <Button className="w-full" onClick={() => handleBookNow(pkg.title)}>
+                    Book Now
+                  </Button>
+                </CardFooter>
+              </Card>
             </motion.div>
           ))}
+        </div>
+
+        <div className="text-center mt-12">
+          <Link href="/destinations">
+            <Button variant="outline" size="lg">
+              View All Packages
+            </Button>
+          </Link>
+        </div>
       </div>
 
-      <div className="text-center mt-12">
-        <link href="#contact.tsx" />
-        <Button variant="outline" size="lg">
-          View All Packages
-        </Button>
-       
-      </div>
-    </div>
-    </section >
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Book Your Trip</DialogTitle>
+            <DialogDescription>Fill in your details to book the {formData.package || "tour"}.</DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="package">Select Package</Label>
+              <select
+                id="package"
+                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={formData.package}
+                onChange={(e) => setFormData({ ...formData, package: e.target.value })}
+              >
+                {packages.map((p) => (
+                  <option key={p.title} value={p.title}>
+                    {p.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                required
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="phone">Phone No</Label>
+              <Input
+                id="phone"
+                type="tel"
+                required
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="address">Address</Label>
+              <Input
+                id="address"
+                required
+                value={formData.address}
+                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="destination">Where to go</Label>
+              <Input
+                id="destination"
+                placeholder="Specific destination..."
+                value={formData.destination}
+                onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
+              />
+            </div>
+            <DialogFooter>
+              <Button type="submit">Confirm Booking</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </section>
   )
 }
