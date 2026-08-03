@@ -17,7 +17,7 @@ export default function RelatedDestinations({ currentDestination }: RelatedDesti
       id: "kalam",
       name: "Kalam",
       description: "A scenic valley with lush forests, meadows, and waterfalls.",
-      image: "/placeholder.svg?height=400&width=600&text=Kalam",
+      image: "/placeholder.svg?height=400&width=600&text=Mahodand+Lake",
       location: "Upper Swat Valley",
     },
     {

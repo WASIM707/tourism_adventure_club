@@ -1,4 +1,4 @@
-// File: /home/wasim/Downloads/Documents/tourism_adventure_club/app/layout.tsx
+// File: /home/wasim/Downloads/Documents/final year project/tourism_adventure_club/app/layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

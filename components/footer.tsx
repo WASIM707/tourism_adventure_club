@@ -78,27 +78,27 @@ export default function Footer() {
             <h3 className="text-xl font-bold mb-4">Tour Packages</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="#" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="#packages" className="text-gray-400 hover:text-white transition-colors">
                   Swat Valley Explorer
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="#packages" className="text-gray-400 hover:text-white transition-colors">
                   Weekend Getaway
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="#packages" className="text-gray-400 hover:text-white transition-colors">
                   Adventure Trek
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="#packages" className="text-gray-400 hover:text-white transition-colors">
                   Cultural Experience
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="#packages" className="text-gray-400 hover:text-white transition-colors">
                   Family Packages
                 </Link>
               </li>

@@ -9,7 +9,7 @@ export default function FeaturedGallery() {
   // Featured images from Swat Valley
   const featuredImages = [
     {
-      src: "https://www.ajktours.com/wp-content/uploads/2023/12/swat-mingora.jpeg",
+      src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800&auto=format&fit=crop",
       alt: "Swat Valley Panoramic View",
       category: "Landscapes",
     },

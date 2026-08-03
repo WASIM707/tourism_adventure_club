@@ -10,21 +10,21 @@ export default function Testimonials() {
     {
       name: "Sarah Johnson",
       location: "United Kingdom",
-      avatar: "/placeholder.svg?height=100&width=100",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
       rating: 5,
       text: "Our trip to Swat Valley was absolutely magical! The tour guides were knowledgeable and friendly, and the itinerary was perfectly balanced. We'll definitely be back!",
     },
     {
       name: "Ahmed Khan",
       location: "Pakistan",
-      avatar: "/placeholder.svg?height=100&width=100",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
       rating: 5,
       text: "As a local Pakistani, I wanted to explore more of my country's beauty. The Swat tour exceeded all expectations. The team took care of everything, making it a stress-free experience.",
     },
     {
       name: "Michael Chen",
       location: "Singapore",
-      avatar: "/placeholder.svg?height=100&width=100",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
       rating: 4,
       text: "The natural beauty of Swat Valley is unparalleled. Our guide was excellent and showed us hidden gems we would never have found on our own. Highly recommended!",
     },
@@ -60,8 +60,13 @@ export default function Testimonials() {
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
                     <Avatar className="h-12 w-12 mr-4">
-                      <AvatarImage src={testimonial.avatar || "/placeholder.svg"} alt={testimonial.name} />
-                      <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
+                      <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
+                      <AvatarFallback>
+                        {testimonial.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </AvatarFallback>
                     </Avatar>
                     <div>
                       <div className="font-medium">{testimonial.name}</div>

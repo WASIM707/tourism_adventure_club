@@ -12,14 +12,14 @@ export default function Destinations() {
       id: "kalam",
       name: "Kalam",
       description: "A scenic valley with lush forests, meadows, and waterfalls.",
-      image: "https://clickpakistan.org/wp-content/uploads/2020/02/feature-image-min-768x768.jpg",
+      image: "https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?auto=format&fit=crop&q=80&w=800",
       location: "Upper Swat Valley",
     },
     {
       id: "mahodand-lake",
       name: "Mahodand Lake",
       description: "A beautiful alpine lake surrounded by snow-capped mountains.",
-      image: "https://www.app.com.pk/wp-content/uploads/2024/07/Mahodand-Lake.webp",
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=800",
       location: "Ushu Valley, Swat",
     },
     {
@@ -33,7 +33,7 @@ export default function Destinations() {
       id: "swat-museum",
       name: "Swat Museum",
       description: "Home to Gandhara art and artifacts from the region's rich history.",
-      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCcuHJHP_Yms7CdOW1MaTEF-C3vFq77l75tQ&s",
+      image: "https://images.unsplash.com/photo-1566127444979-b3d2b654e3d7?auto=format&fit=crop&q=80&w=800"                                   ,
       location: "Saidu Sharif, Swat",
     },
     {

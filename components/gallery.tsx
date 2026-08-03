@@ -90,7 +90,7 @@ export default function Gallery() {
       description: "Magical sunrays filtering through the dense pine forests of Ushu creating a mystical atmosphere.",
     },
     {
-      src: "https://www.youlinmagazine.com/articles/1723.jpg",
+      src: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070&auto=format&fit=crop",
       alt: "Panoramic View of Spin Khwar Lake",
       category: "Lakes",
       description:
@@ -109,7 +109,7 @@ export default function Gallery() {
       description: "Beautiful terraced agricultural fields on the hillsides of Swat Valley in spring.",
     },
     {
-      src: "https://naturehikepakistan.pk/wp-content/uploads/elementor/thumbs/mahudanf-huh-min-qkrlgtnsil1c4bvuaxc4n01nqycg02e4iy6o9bpp5g.jpg",
+      src: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop",
       alt: "Utror Valley Panorama",
       category: "Landscapes",
       description: "Expansive view of the lush green Utror Valley with traditional villages and grazing livestock.",
@@ -121,7 +121,7 @@ export default function Gallery() {
       description: "Local fishermen using traditional methods to catch trout in the clear waters of Swat River.",
     },
     {
-      src: "https://res.cloudinary.com/www-travelpakistani-com/image/upload/v1684491699/Boyun_Village_swat.jpg",
+      src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2070&auto=format&fit=crop",
       alt: "Aerial View of Boyun Village",
       category: "Landscapes",
       description: "The 'Green Top' village of Boyun perched on a hilltop offering spectacular views of Swat Valley.",
