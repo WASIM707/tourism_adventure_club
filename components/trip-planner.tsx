@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, type ChangeEvent } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { supabase } from "@/lib/supabase"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -45,7 +46,8 @@ import {
   Activity,
   Map as MapIcon,
   Landmark,
-  BookOpen
+  BookOpen,
+  Loader2
 } from "lucide-react"
 
 // --- DATA MODELS & CONSTANTS ---
@@ -382,6 +384,10 @@ export default function TripPlanner() {
   ])
   const [specialRequests, setSpecialRequests] = useState<string>("")
 
+  // Database Submission State
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const [submitMessage, setSubmitMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
+
   // Active Trip Type Object
   const activeTripTypeObj = useMemo(() => {
     return TRIP_TYPES.find((t) => t.id === selectedTripType) || TRIP_TYPES[0]
@@ -402,7 +408,7 @@ export default function TripPlanner() {
   // Activity Toggle
   const toggleActivity = (activity: string) => {
     if (selectedActivities.includes(activity)) {
-      setSelectedActivities(selectedActivities.filter((a) => a !== activity))
+      setSelectedActivities(selectedActivities.filter((a: string) => a !== activity))
     } else {
       setSelectedActivities([...selectedActivities, activity])
     }
@@ -448,11 +454,70 @@ export default function TripPlanner() {
   }, [selectedTripType])
 
   const handleNextStep = () => {
-    if (currentStep < 4) setCurrentStep((prev) => prev + 1)
+    if (currentStep < 4) setCurrentStep((prev: number) => prev + 1)
   }
 
   const handlePrevStep = () => {
-    if (currentStep > 1) setCurrentStep((prev) => prev - 1)
+    if (currentStep > 1) setCurrentStep((prev: number) => prev - 1)
+  }
+
+  // Database Submission Function
+  async function submitTripRequest() {
+    setIsSubmitting(true)
+    setSubmitMessage(null)
+
+    const payload = {
+      full_name: fullName.trim() || "",
+      email: email.trim() || "",
+      phone: phone.trim() || "",
+      country: country.trim() || "",
+      travel_date: travelDate ? format(travelDate, "yyyy-MM-dd") : null,
+      duration_days: Number(durationDays) || 0,
+      travelers: Number(travelers) || 0,
+      budget: Number(budgetCap) || 0,
+      hotel: selectedHotelOption?.name || "",
+      hotel_category: hotelCategory || "",
+      transport: transportType || "",
+      include_guide: Boolean(includeGuide),
+      trip_type: selectedTripType || "",
+      activities: Array.isArray(selectedActivities) ? selectedActivities : [],
+      special_requests: specialRequests.trim() || "",
+      total_cost: Number(calculatedCosts?.total) || 0,
+      status: "pending"
+    }
+
+    console.log("[TripPlanner] Submitting trip request to 'trip_requests':", payload)
+
+    try {
+      const { data, error } = await supabase
+  .from("trip_requests")
+  .insert([payload])
+  .select()
+  ;
+  
+
+
+      if (error) {
+        console.error("[TripPlanner] Supabase error during insert:", error)
+        console.error("Code:", error.code)
+        console.error("Message:", error.message)
+        console.error("Details:", error.details)
+        console.error("Hint:", error.hint)
+
+        setSubmitMessage({
+          type: "error",
+          text: `Failed to submit trip request: ${error.message || "Database error"}`
+        })
+      } else {
+        console.log("[TripPlanner] Successfully inserted trip request:", data)
+        setSubmitMessage({ type: "success", text: "Trip request successfully saved." })
+      }
+    } catch (err) {
+      console.error("[TripPlanner] Unexpected submission error:", err)
+      setSubmitMessage({ type: "error", text: "Failed to submit trip request due to an unexpected error." })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -482,12 +547,12 @@ export default function TripPlanner() {
         {/* Multi-Step Wizard Stepper */}
         <div className="mb-10 max-w-4xl mx-auto">
           <div className="grid grid-cols-4 gap-2 relative">
-            {[ 
+            {[
               { step: 1, title: "Personal", subtitle: "Contact Info" },
               { step: 2, title: "Logistics", subtitle: "Budget & Dates" },
               { step: 3, title: "Trip Type", subtitle: "Activities" },
               { step: 4, title: "AI Review", subtitle: "Summary & Places" }
-            ].map((s) => (
+            ].map((s: { step: number; title: string; subtitle: string }) => (
               <button
                 key={s.step}
                 onClick={() => setCurrentStep(s.step)}
@@ -558,7 +623,7 @@ export default function TripPlanner() {
                             id="fullName"
                             placeholder="e.g. John Doe"
                             value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setFullName(e.target.value)}
                             className="rounded-xl bg-background/50 border-border focus:ring-2 focus:ring-primary"
                           />
                         </div>
@@ -572,7 +637,7 @@ export default function TripPlanner() {
                             type="email"
                             placeholder="john@example.com"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                             className="rounded-xl bg-background/50 border-border focus:ring-2 focus:ring-primary"
                           />
                         </div>
@@ -587,7 +652,7 @@ export default function TripPlanner() {
                             id="phone"
                             placeholder="+92 300 1234567"
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}
                             className="rounded-xl bg-background/50 border-border focus:ring-2 focus:ring-primary"
                           />
                         </div>
@@ -600,7 +665,7 @@ export default function TripPlanner() {
                             id="country"
                             placeholder="Pakistan / USA / UK"
                             value={country}
-                            onChange={(e) => setCountry(e.target.value)}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setCountry(e.target.value)}
                             className="rounded-xl bg-background/50 border-border focus:ring-2 focus:ring-primary"
                           />
                         </div>
@@ -657,7 +722,7 @@ export default function TripPlanner() {
                               min={1}
                               max={30}
                               value={durationDays}
-                              onChange={(e) => setDurationDays(Math.max(1, parseInt(e.target.value) || 1))}
+                              onChange={(e: ChangeEvent<HTMLInputElement>) => setDurationDays(Math.max(1, parseInt(e.target.value) || 1))}
                               className="rounded-xl bg-background/50 border-border text-center font-bold text-lg"
                             />
                             <span className="text-sm text-muted-foreground font-medium">Days/Nights</span>
@@ -675,7 +740,7 @@ export default function TripPlanner() {
                             min={1}
                             max={50}
                             value={travelers}
-                            onChange={(e) => setTravelers(Math.max(1, parseInt(e.target.value) || 1))}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setTravelers(Math.max(1, parseInt(e.target.value) || 1))}
                             className="rounded-xl bg-background/50 border-border font-bold text-lg text-center"
                           />
                         </div>
@@ -746,7 +811,7 @@ export default function TripPlanner() {
                             max={5000}
                             step={100}
                             value={budgetCap}
-                            onChange={(e) => setBudgetCap(Number(e.target.value))}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setBudgetCap(Number(e.target.value))}
                             className="w-full accent-primary cursor-pointer"
                           />
                         </div>
@@ -816,7 +881,7 @@ export default function TripPlanner() {
                         </p>
 
                         <div className="flex flex-wrap gap-2 pt-2">
-                          {activeTripTypeObj.activities.map((act) => {
+                          {activeTripTypeObj.activities.map((act: string) => {
                             const active = selectedActivities.includes(act)
                             return (
                               <button
@@ -846,7 +911,7 @@ export default function TripPlanner() {
                           id="requests"
                           placeholder="e.g. Halal food requirements, wheelchair accessibility needed, honeymoon anniversary setup..."
                           value={specialRequests}
-                          onChange={(e) => setSpecialRequests(e.target.value)}
+                          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setSpecialRequests(e.target.value)}
                           className="rounded-xl bg-background/50 border-border min-h-[80px]"
                         />
                       </div>
@@ -899,7 +964,7 @@ export default function TripPlanner() {
                             </div>
                             <div className="pt-2 border-t border-border/40 flex items-center justify-between">
                               <div className="flex flex-wrap gap-1">
-                                {selectedHotelOption.amenities.map((a) => (
+                                {selectedHotelOption.amenities.map((a: string) => (
                                   <span key={a} className="text-[9px] bg-muted px-2 py-0.5 rounded-md font-medium text-foreground">
                                     {a}
                                   </span>
@@ -919,7 +984,7 @@ export default function TripPlanner() {
                           <MapIcon className="w-4 h-4 text-primary" /> Recommended Tourist Destinations
                         </h4>
                         <div className="grid sm:grid-cols-2 gap-3">
-                          {recommendedPlaces.map((place, idx) => (
+                          {recommendedPlaces.map((place: any, idx: number) => (
                             <div key={idx} className="rounded-2xl border border-border/50 bg-card/60 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                               <div className="relative h-32 w-full">
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -964,12 +1029,28 @@ export default function TripPlanner() {
                 </AnimatePresence>
               </CardContent>
 
+              {/* Submission Status Message Feedback Banner */}
+              {submitMessage && (
+                <div className="px-6 pb-2">
+                  <div
+                    className={cn(
+                      "p-3 rounded-xl text-xs font-semibold text-center transition-all",
+                      submitMessage.type === "success"
+                        ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
+                        : "bg-destructive/10 border border-destructive/30 text-destructive"
+                    )}
+                  >
+                    {submitMessage.text}
+                  </div>
+                </div>
+              )}
+
               {/* Navigation Footer */}
               <CardFooter className="bg-muted/30 border-t border-border/50 p-4 md:p-6 flex justify-between items-center">
                 <Button
                   variant="outline"
                   onClick={handlePrevStep}
-                  disabled={currentStep === 1}
+                  disabled={currentStep === 1 || isSubmitting}
                   className="rounded-xl gap-2 font-semibold"
                 >
                   <ChevronLeft className="w-4 h-4" /> Back
@@ -981,10 +1062,19 @@ export default function TripPlanner() {
                   </Button>
                 ) : (
                   <Button
-                    onClick={() => alert(`🎉 Trip Plan Successfully Request Generated! Total Estimate: $${calculatedCosts.total}. Our travel concierge will reach out to ${email || "you"} shortly.`)}
-                    className="rounded-xl gap-2 font-extrabold px-8 bg-emerald-600 hover:bg-emerald-700 text-white shadow-xl shadow-emerald-600/30 animate-bounce"
+                    onClick={submitTripRequest}
+                    disabled={isSubmitting}
+                    className="rounded-xl gap-2 font-extrabold px-8 bg-emerald-600 hover:bg-emerald-700 text-white shadow-xl shadow-emerald-600/30"
                   >
-                    Confirm & Request Itinerary <Sparkles className="w-4 h-4" />
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" /> Saving Request...
+                      </>
+                    ) : (
+                      <>
+                        Confirm & Request Itinerary <Sparkles className="w-4 h-4" />
+                      </>
+                    )}
                   </Button>
                 )}
               </CardFooter>
@@ -1088,7 +1178,7 @@ export default function TripPlanner() {
                 <div className="space-y-2 pt-1 border-t border-border/40">
                   <span className="text-xs font-bold text-muted-foreground block">Active Activities:</span>
                   <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-1">
-                    {selectedActivities.map((act) => (
+                    {selectedActivities.map((act: string) => (
                       <span
                         key={act}
                         className="text-[10px] bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded-md font-semibold"

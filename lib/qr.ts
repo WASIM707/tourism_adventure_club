@@ -1,16 +1,25 @@
 import QRCode from 'qrcode';
 
+type QRCodeOptions = {
+  width?: number;
+  margin?: number;
+  color?: {
+    dark?: string;
+    light?: string;
+  };
+  errorCorrectionLevel?: 'L' | 'M' | 'Q' | 'H';
+};
 
 export const generateQRCode = async (
-  text: string, 
-  options?: QRCode.QRCodeToDataURLOptions
+  text: string,
+  options?: QRCodeOptions
 ): Promise<string> => {
   try {
     if (!text) {
       throw new Error('Input text is required to generate a QR code.');
     }
 
-    const defaultOptions: QRCode.QRCodeToDataURLOptions = {
+    const defaultOptions: QRCodeOptions = {
       width: 400,
       margin: 2,
       color: {
