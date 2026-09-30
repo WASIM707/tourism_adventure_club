@@ -463,13 +463,20 @@ export default function TripPlanner() {
 
   // Database Submission Function
   async function submitTripRequest() {
+    if (isSubmitting) return
+
+    if (!fullName.trim() || !phone.trim() || !email.trim()) {
+      alert("Please fill in all required contact fields (Full Name, Phone Number, and Email Address).")
+      return
+    }
+
     setIsSubmitting(true)
     setSubmitMessage(null)
 
     const payload = {
-      full_name: fullName.trim() || "",
-      email: email.trim() || "",
-      phone: phone.trim() || "",
+      full_name: fullName.trim(),
+      email: email.trim(),
+      phone: phone.trim(),
       country: country.trim() || "",
       travel_date: travelDate ? format(travelDate, "yyyy-MM-dd") : null,
       duration_days: Number(durationDays) || 0,
@@ -490,20 +497,12 @@ export default function TripPlanner() {
 
     try {
       const { data, error } = await supabase
-  .from("trip_requests")
-  .insert([payload])
-  .select()
-  ;
-  
-
+        .from("trip_requests")
+        .insert([payload])
+        .select()
 
       if (error) {
         console.error("[TripPlanner] Supabase error during insert:", error)
-        console.error("Code:", error.code)
-        console.error("Message:", error.message)
-        console.error("Details:", error.details)
-        console.error("Hint:", error.hint)
-
         setSubmitMessage({
           type: "error",
           text: `Failed to submit trip request: ${error.message || "Database error"}`
@@ -511,6 +510,7 @@ export default function TripPlanner() {
       } else {
         console.log("[TripPlanner] Successfully inserted trip request:", data)
         setSubmitMessage({ type: "success", text: "Trip request successfully saved." })
+        window.location.reload()
       }
     } catch (err) {
       console.error("[TripPlanner] Unexpected submission error:", err)
